@@ -9,8 +9,12 @@ class OrderWorkflowImpl : OrderWorkflow {
     private val orderActivity = createOrderActivityStub()
     private var isOrderAccepted:Boolean = false
     private var isOrderDelivered:Boolean = false
+    private lateinit var order:Order
 
-    override fun startOrderWorkflow() {
+    override fun startOrderWorkflow(order: Order) {
+        order.status = "Placed"
+        this.order = order
+        println("Order ${order.orderId} is placed")
         orderActivity.placeOrder()
 
         println("Waiting for order to be accepted...")
@@ -21,13 +25,19 @@ class OrderWorkflowImpl : OrderWorkflow {
     }
 
     override fun signalOrderAccepted() {
-        orderActivity.orderAccepted()
+        println("Received a signal to accept order ${order.orderId}")
+        orderActivity.orderAccepted(this.order)
+        order.status = "Accepted"
         isOrderAccepted = true
     }
 
     override fun signalOrderDelivered() {
-        orderActivity.orderDelivered()
+        orderActivity.orderDelivered(this.order)
         isOrderDelivered = true
+    }
+
+    override fun showOrder(): Order {
+        return order
     }
 
     fun createOrderActivityStub(): OrderActivity {

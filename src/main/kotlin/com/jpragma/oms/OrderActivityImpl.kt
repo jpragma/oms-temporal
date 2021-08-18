@@ -8,11 +8,11 @@ class OrderActivityImpl : OrderActivity {
         println("*** Order placed")
     }
 
-    override fun orderAccepted() {
-        println("*** Order accepted")
+    override fun orderAccepted(order: Order) {
+        println("*** Order ${order.orderId} accepted")
     }
 
-    override fun orderDelivered() {
-        println("*** Order delivered")
+    override fun orderDelivered(order: Order) {
+        println("*** Order ${order.orderId} delivered")
     }
 }

@@ -11,9 +11,10 @@ class OmsService(
     private val workflowClient: WorkflowClient
 ) {
 
-    fun placeOrder(workflowId: String) {
+    fun placeOrder(order: Order) {
+        val workflowId = order.orderId
         val orderWorkflow = createWorkflow(workflowId)
-        WorkflowClient.start(orderWorkflow::startOrderWorkflow)
+        WorkflowClient.start { orderWorkflow.startOrderWorkflow(order) }
     }
 
     fun acceptOrder(workflowId: String) {

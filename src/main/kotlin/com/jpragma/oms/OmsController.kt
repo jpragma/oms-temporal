@@ -1,18 +1,19 @@
 package com.jpragma.oms
 
-import io.micronaut.http.annotation.Controller
-import io.micronaut.http.annotation.Get
-import io.micronaut.http.annotation.QueryValue
+import io.micronaut.http.annotation.*
+import java.util.*
 
 @Controller("/oms")
 class OmsController(
     private val omsService: OmsService
 ) {
 
-    @Get("/place")
-    fun placeOrder(@QueryValue("orderId") orderId: String): String {
-        omsService.placeOrder(orderId)
-        return "Order $orderId has been placed"
+    @Post("/place")
+    fun placeOrder(@Body orderItems: List<OrderItem>): String {
+        val orderId = UUID.randomUUID().toString()
+        val order = Order(orderId, orderItems)
+        omsService.placeOrder(order)
+        return orderId
     }
 
     @Get("/accept")
