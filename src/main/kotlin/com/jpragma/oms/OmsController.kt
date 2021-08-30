@@ -1,7 +1,7 @@
 package com.jpragma.oms
 
 import io.micronaut.http.annotation.*
-import java.util.*
+
 
 @Controller("/oms")
 class OmsController(
@@ -10,22 +10,16 @@ class OmsController(
 
     @Post("/place")
     fun placeOrder(@Body orderItems: List<OrderItem>): String {
-        val orderId = UUID.randomUUID().toString()
+        val orderId = OrderId.randomOrderId()
         val order = Order(orderId, orderItems)
         omsService.placeOrder(order)
-        return orderId
+        return orderId.toString()
     }
 
-    @Get("/accept")
-    fun acceptOrder(@QueryValue("orderId") orderId: String): String {
+    @Put("/accept")
+    fun acceptOrder(@QueryValue("orderId") orderId: OrderId): String {
         omsService.acceptOrder(orderId)
         return "Order $orderId has been accepted"
-    }
-
-    @Get("/deliver")
-    fun deliverOrder(@QueryValue("orderId") orderId: String): String {
-        omsService.deliverOrder(orderId)
-        return "Order $orderId has been delivered"
     }
 
 }

@@ -9,6 +9,4 @@ interface OrderActivity {
     fun placeOrder()
     @ActivityMethod
     fun orderAccepted(order: Order)
-    @ActivityMethod
-    fun orderDelivered(order: Order)
 }

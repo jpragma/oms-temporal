@@ -8,7 +8,7 @@ import io.temporal.common.converter.*
 import io.temporal.serviceclient.WorkflowServiceStubs
 import io.temporal.serviceclient.WorkflowServiceStubsOptions
 import io.temporal.worker.WorkerFactory
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 
 @Factory
@@ -21,13 +21,13 @@ class OrderBeanFactory {
         )
     }
 
-    fun customPayloadConverter(objectMapper: ObjectMapper): DataConverter {
+    private fun customPayloadConverter(objectMapper: ObjectMapper): DataConverter {
         // Order is important as the first converter that can convert the payload is used
         return DefaultDataConverter(
             NullPayloadConverter(),
             ByteArrayPayloadConverter(),
             ProtobufJsonPayloadConverter(),
-            JacksonJsonPayloadConverter(objectMapper)
+            JacksonJsonPayloadConverter(objectMapper) // TODO REPLACE WITH Kotlin json serializer
         )
     }
 

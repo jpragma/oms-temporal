@@ -8,7 +8,7 @@ import javax.annotation.PostConstruct
 class WorkerRegistration {
     @PostConstruct
     fun registerWorker(workerFactory: WorkerFactory, orderActivity: OrderActivity) {
-        val worker = workerFactory.newWorker(OrderWorkflow.QUEUE_NAME)
+        val worker = workerFactory.newWorker(OrderWorkflow.ORDER_QUEUE_NAME)
         worker.registerWorkflowImplementationTypes(OrderWorkflowImpl::class.java)
         worker.registerActivitiesImplementations(orderActivity)
         workerFactory.start()

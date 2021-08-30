@@ -1,9 +1,9 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.4.32"
-    id("org.jetbrains.kotlin.kapt") version "1.4.32"
+    id("org.jetbrains.kotlin.jvm") version "1.5.30"
+    id("org.jetbrains.kotlin.kapt") version "1.5.30"
     id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("io.micronaut.application") version "1.5.4"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.4.32"
+    id("io.micronaut.application") version "2.0.3"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.5.30"
 }
 
 version = "0.1"
@@ -40,7 +40,7 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers")
     implementation("io.micronaut:micronaut-validation")
 
-    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     implementation("io.temporal:temporal-sdk:1.0.9")
 }

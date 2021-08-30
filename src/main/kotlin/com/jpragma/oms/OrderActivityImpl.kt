@@ -1,6 +1,7 @@
 package com.jpragma.oms
 
-import javax.inject.Singleton
+import jakarta.inject.Singleton
+
 
 @Singleton
 class OrderActivityImpl : OrderActivity {
@@ -12,7 +13,4 @@ class OrderActivityImpl : OrderActivity {
         println("*** Order ${order.orderId} accepted")
     }
 
-    override fun orderDelivered(order: Order) {
-        println("*** Order ${order.orderId} delivered")
-    }
 }

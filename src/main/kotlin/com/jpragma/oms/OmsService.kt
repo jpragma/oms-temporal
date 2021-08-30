@@ -2,35 +2,27 @@ package com.jpragma.oms
 
 import io.temporal.client.WorkflowClient
 import io.temporal.client.WorkflowOptions
-import io.temporal.serviceclient.WorkflowServiceStubs
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 @Singleton
 class OmsService(
-    private val workflowServiceStubs: WorkflowServiceStubs,
     private val workflowClient: WorkflowClient
 ) {
 
     fun placeOrder(order: Order) {
-        val workflowId = order.orderId
-        val orderWorkflow = createWorkflow(workflowId)
+        val orderWorkflow = createWorkflow(order.orderId)
         WorkflowClient.start { orderWorkflow.startOrderWorkflow(order) }
     }
 
-    fun acceptOrder(workflowId: String) {
-        val orderWorkflow = workflowClient.newWorkflowStub(OrderWorkflow::class.java, workflowId)
+    fun acceptOrder(orderId: OrderId) {
+        val orderWorkflow = workflowClient.newWorkflowStub(OrderWorkflow::class.java, orderId.toWorkflowId())
         orderWorkflow.signalOrderAccepted()
     }
 
-    fun deliverOrder(workflowId: String) {
-        val orderWorkflow = workflowClient.newWorkflowStub(OrderWorkflow::class.java, workflowId)
-        orderWorkflow.signalOrderDelivered()
-    }
-
-    private fun createWorkflow(workflowId: String): OrderWorkflow {
+    private fun createWorkflow(orderId: OrderId): OrderWorkflow {
         val options = WorkflowOptions.newBuilder()
-            .setTaskQueue(OrderWorkflow.QUEUE_NAME)
-            .setWorkflowId(workflowId)
+            .setTaskQueue(OrderWorkflow.ORDER_QUEUE_NAME)
+            .setWorkflowId(orderId.toWorkflowId())
             .build()
         return workflowClient.newWorkflowStub(OrderWorkflow::class.java, options)
     }

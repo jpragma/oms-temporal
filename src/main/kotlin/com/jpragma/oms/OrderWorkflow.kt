@@ -8,7 +8,7 @@ import io.temporal.workflow.WorkflowMethod
 @WorkflowInterface
 interface OrderWorkflow {
     companion object {
-        val QUEUE_NAME = "Customer_Order"
+        val ORDER_QUEUE_NAME = "Customer_Order"
     }
 
     @WorkflowMethod
@@ -16,9 +16,6 @@ interface OrderWorkflow {
 
     @SignalMethod
     fun signalOrderAccepted()
-
-    @SignalMethod
-    fun signalOrderDelivered()
 
     @QueryMethod
     fun showOrder():Order

@@ -7,40 +7,29 @@ import java.time.Duration
 
 class OrderWorkflowImpl : OrderWorkflow {
     private val orderActivity = createOrderActivityStub()
-    private var isOrderAccepted:Boolean = false
-    private var isOrderDelivered:Boolean = false
     private lateinit var order:Order
 
     override fun startOrderWorkflow(order: Order) {
-        order.status = "Placed"
-        this.order = order
-        println("Order ${order.orderId} is placed")
+        this.order = order.apply { status = OrderStatus.PLACED }
+
         orderActivity.placeOrder()
+        println("Order ${order.orderId} is placed")
 
         println("Waiting for order to be accepted...")
-        Workflow.await { isOrderAccepted }
-
-        println("Waiting for order to be delivered...")
-        Workflow.await { isOrderDelivered }
+        Workflow.await { order.status == OrderStatus.ACCEPTED }
     }
 
     override fun signalOrderAccepted() {
         println("Received a signal to accept order ${order.orderId}")
         orderActivity.orderAccepted(this.order)
-        order.status = "Accepted"
-        isOrderAccepted = true
-    }
-
-    override fun signalOrderDelivered() {
-        orderActivity.orderDelivered(this.order)
-        isOrderDelivered = true
+        order.status = OrderStatus.ACCEPTED
     }
 
     override fun showOrder(): Order {
         return order
     }
 
-    fun createOrderActivityStub(): OrderActivity {
+    private fun createOrderActivityStub(): OrderActivity {
         return Workflow.newActivityStub(OrderActivity::class.java, defaultActivityOptions())
     }
 
