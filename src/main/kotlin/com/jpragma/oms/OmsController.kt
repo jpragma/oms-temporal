@@ -13,12 +13,12 @@ class OmsController(
         val orderId = OrderId.randomOrderId()
         val order = Order(orderId, orderItems)
         omsService.placeOrder(order)
-        return orderId.toString()
+        return orderId.toWorkflowId()
     }
 
     @Put("/accept")
-    fun acceptOrder(@QueryValue("orderId") orderId: OrderId): String {
-        omsService.acceptOrder(orderId)
+    fun acceptOrder(@QueryValue("orderId") orderId: String): String {
+        omsService.acceptOrder(OrderId(orderId))
         return "Order $orderId has been accepted"
     }
 

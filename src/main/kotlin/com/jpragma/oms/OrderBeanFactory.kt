@@ -1,6 +1,6 @@
 package com.jpragma.oms
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.jpragma.util.KotlinSerializationJsonPayloadConverter
 import io.micronaut.context.annotation.Factory
 import io.temporal.client.WorkflowClient
 import io.temporal.client.WorkflowClientOptions
@@ -21,19 +21,19 @@ class OrderBeanFactory {
         )
     }
 
-    private fun customPayloadConverter(objectMapper: ObjectMapper): DataConverter {
+    private fun customPayloadConverter(): DataConverter {
         // Order is important as the first converter that can convert the payload is used
         return DefaultDataConverter(
             NullPayloadConverter(),
             ByteArrayPayloadConverter(),
             ProtobufJsonPayloadConverter(),
-            JacksonJsonPayloadConverter(objectMapper) // TODO REPLACE WITH Kotlin json serializer
+            KotlinSerializationJsonPayloadConverter()
         )
     }
 
     @Singleton
-    fun workflowClient(workflowServiceStubs:WorkflowServiceStubs, objectMapper: ObjectMapper): WorkflowClient {
-        val dataConverter = customPayloadConverter(objectMapper)
+    fun workflowClient(workflowServiceStubs:WorkflowServiceStubs): WorkflowClient {
+        val dataConverter = customPayloadConverter()
         return WorkflowClient.newInstance(workflowServiceStubs,
             WorkflowClientOptions.newBuilder()
                 .setNamespace("default")

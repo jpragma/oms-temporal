@@ -1,13 +1,16 @@
 package com.jpragma.oms
 
+import kotlinx.serialization.Serializable
 import java.util.*
 
+@Serializable
 data class Order(
     val orderId: OrderId,
     val items: List<OrderItem>,
     var status: OrderStatus = OrderStatus.NONE
 )
 
+@Serializable
 data class OrderItem(
     val itemId: String,
     val description: String,
@@ -15,6 +18,7 @@ data class OrderItem(
     val amount: Double
 )
 
+@Serializable
 @JvmInline
 value class OrderId(private val v:String) {
     companion object {

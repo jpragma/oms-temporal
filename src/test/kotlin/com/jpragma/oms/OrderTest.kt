@@ -1,34 +1,32 @@
 package com.jpragma.oms
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.fasterxml.jackson.module.kotlin.readValue
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import jakarta.inject.Inject
-import org.junit.jupiter.api.Assertions.*
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-@MicronautTest
+@ExperimentalSerializationApi
 internal class OrderTest {
 
-    @Inject
-    private lateinit var mapper:ObjectMapper
-
     @Test
-    fun `can deserialize Order object`() {
-        mapper.registerModule(KotlinModule())
+    fun `can deserialize Order object using kotlin_serialization`() {
         val json = """{
-            "orderId": "85296db8-dad0-445e-9f9c-4bfd5e6af542",
+            "orderId": "o123",
             "items": [
               {
-                "itemId": "wvb1",
-                "description": "White Vienna",
-                "price": 5.45,
+                "itemId": "i987",
+                "description": "BLT sandwich",
+                "price": 8.45,
                 "amount": 2
               }
             ]
           }""".trimIndent()
-        val order: Order = mapper.readValue(json)
-        assertNotNull(order)
+        val order = Json.decodeFromString<Order>(json)
+        val expectedOrder = Order(
+            orderId = OrderId("o123"),
+            items = listOf(OrderItem("i987", "BLT sandwich", 8.45, 2.0))
+        )
+        assertEquals(expectedOrder, order)
     }
 }
