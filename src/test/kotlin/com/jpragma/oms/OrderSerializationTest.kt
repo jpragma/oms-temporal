@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 @ExperimentalSerializationApi
-internal class OrderTest {
+internal class OrderSerializationTest {
 
     @Test
     fun `can deserialize Order object using kotlin_serialization`() {

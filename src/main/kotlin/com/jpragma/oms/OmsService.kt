@@ -1,5 +1,6 @@
 package com.jpragma.oms
 
+import com.jpragma.oms.workflow.OrderWorkflow
 import io.temporal.client.WorkflowClient
 import io.temporal.client.WorkflowOptions
 import jakarta.inject.Singleton

@@ -1,6 +1,6 @@
 package com.jpragma.oms
 
-import com.jpragma.util.KotlinSerializationJsonPayloadConverter
+import com.jpragma.temporal.KotlinSerializationJsonPayloadConverter
 import io.micronaut.context.annotation.Factory
 import io.temporal.client.WorkflowClient
 import io.temporal.client.WorkflowClientOptions

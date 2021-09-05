@@ -1,5 +1,8 @@
-package com.jpragma.oms
+package com.jpragma.oms.workflow
 
+import com.jpragma.oms.Order
+import com.jpragma.oms.OrderStatus
+import com.jpragma.oms.activity.OrderActivity
 import io.temporal.activity.ActivityOptions
 import io.temporal.common.RetryOptions
 import io.temporal.workflow.Workflow
@@ -7,20 +10,17 @@ import java.time.Duration
 
 class OrderWorkflowImpl : OrderWorkflow {
     private val orderActivity = createOrderActivityStub()
-    private lateinit var order:Order
+    private lateinit var order: Order
 
     override fun startOrderWorkflow(order: Order) {
         this.order = order.apply { status = OrderStatus.PLACED }
 
         orderActivity.placeOrder()
-        println("Order ${order.orderId} is placed")
 
-        println("Waiting for order to be accepted...")
         Workflow.await { order.status == OrderStatus.ACCEPTED }
     }
 
     override fun signalOrderAccepted() {
-        println("Received a signal to accept order ${order.orderId}")
         orderActivity.orderAccepted(this.order)
         order.status = OrderStatus.ACCEPTED
     }

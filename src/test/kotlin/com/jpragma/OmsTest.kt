@@ -12,7 +12,7 @@ class OmsTest {
     lateinit var application: EmbeddedApplication<*>
 
     @Test
-    fun testItWorks() {
+    fun `application can start`() {
         Assertions.assertTrue(application.isRunning)
     }
 

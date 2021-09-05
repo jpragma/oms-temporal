@@ -1,4 +1,4 @@
-package com.jpragma.util
+package com.jpragma.temporal
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.google.protobuf.ByteString

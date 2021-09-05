@@ -1,5 +1,6 @@
-package com.jpragma.oms
+package com.jpragma.oms.workflow
 
+import com.jpragma.oms.Order
 import io.temporal.workflow.QueryMethod
 import io.temporal.workflow.SignalMethod
 import io.temporal.workflow.WorkflowInterface
@@ -18,5 +19,5 @@ interface OrderWorkflow {
     fun signalOrderAccepted()
 
     @QueryMethod
-    fun showOrder():Order
+    fun showOrder(): Order
 }
