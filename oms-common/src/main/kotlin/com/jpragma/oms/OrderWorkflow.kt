@@ -1,4 +1,4 @@
-package com.jpragma.oms.workflow
+package com.jpragma.oms
 
 import com.jpragma.oms.Order
 import io.temporal.workflow.QueryMethod

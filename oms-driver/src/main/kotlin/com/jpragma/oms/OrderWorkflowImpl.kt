@@ -1,7 +1,5 @@
-package com.jpragma.oms.workflow
+package com.jpragma.oms
 
-import com.jpragma.oms.Order
-import com.jpragma.oms.OrderStatus
 import com.jpragma.oms.activity.OrderActivity
 import io.temporal.activity.ActivityOptions
 import io.temporal.common.RetryOptions
