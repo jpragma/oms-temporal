@@ -15,13 +15,17 @@ allprojects {
     }
 }
 
+val kotlinVersion=project.properties.get("kotlinVersion")
+
 subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "kotlin-kapt")
+    dependencies {
+        implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+        runtimeOnly("ch.qos.logback:logback-classic")
+    }
 }
-
-
-val kotlinVersion=project.properties.get("kotlinVersion")
 
 micronaut {
     runtime("netty")
