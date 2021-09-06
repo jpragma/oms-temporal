@@ -7,13 +7,21 @@ plugins {
     kotlin("plugin.serialization") version "1.5.30"
 }
 
-version = "0.1"
-group = "com.jpragma"
+allprojects {
+    version = "0.1"
+    group = "com.jpragma"
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply(plugin = "kotlin")
+    apply(plugin = "kotlin-kapt")
+}
+
 
 val kotlinVersion=project.properties.get("kotlinVersion")
-repositories {
-    mavenCentral()
-}
 
 micronaut {
     runtime("netty")
