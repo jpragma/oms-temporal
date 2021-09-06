@@ -4,7 +4,7 @@ plugins {
 }
 
 micronaut {
-    runtime("netty")
+    runtime("none")
     testRuntime("junit5")
     processing {
         incremental(true)
@@ -14,6 +14,7 @@ micronaut {
 
 dependencies {
     implementation(project(":oms-common"))
+    implementation("io.micronaut:micronaut-runtime")
 }
 
 application {
