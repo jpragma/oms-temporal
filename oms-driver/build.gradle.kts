@@ -12,6 +12,10 @@ micronaut {
     }
 }
 
+dependencies {
+    implementation(project(":oms-common"))
+}
+
 application {
     mainClass.set("com.jpragma.ApplicationKt")
 }
