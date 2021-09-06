@@ -1,12 +1,13 @@
-package com.jpragma.temporal
+package com.jpragma.oms.temporal
 
-import com.fasterxml.jackson.core.JsonProcessingException
 import com.google.protobuf.ByteString
 import io.temporal.api.common.v1.Payload
 import io.temporal.common.converter.DataConverterException
 import io.temporal.common.converter.PayloadConverter
-import kotlinx.serialization.*
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import java.io.IOException
 import java.lang.reflect.Type
 import java.nio.charset.StandardCharsets
@@ -31,7 +32,7 @@ class KotlinSerializationJsonPayloadConverter : PayloadConverter {
                     .setData(ByteString.copyFrom(serialized))
                     .build()
             )
-        } catch (e: JsonProcessingException) {
+        } catch (e: Exception) {
             throw DataConverterException(e)
         }
     }
