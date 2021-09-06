@@ -1,8 +1,5 @@
-package com.jpragma.temporal
+package com.jpragma.oms
 
-import com.jpragma.oms.activity.OrderActivity
-import com.jpragma.oms.OrderWorkflow
-import com.jpragma.oms.OrderWorkflowImpl
 import io.micronaut.context.annotation.Context
 import io.temporal.worker.WorkerFactory
 import javax.annotation.PostConstruct

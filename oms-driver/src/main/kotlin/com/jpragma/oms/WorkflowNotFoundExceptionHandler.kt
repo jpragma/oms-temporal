@@ -1,4 +1,4 @@
-package com.jpragma.temporal
+package com.jpragma.oms
 
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpResponse

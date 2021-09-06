@@ -17,5 +17,5 @@ dependencies {
 }
 
 application {
-    mainClass.set("com.jpragma.oms.DriverApplicationKt")
+    mainClass.set("com.jpragma.oms.WorkerApplicationKt")
 }

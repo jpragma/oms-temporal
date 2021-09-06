@@ -1,4 +1,4 @@
-package com.jpragma
+package com.jpragma.oms
 
 import io.micronaut.runtime.Micronaut.*
 fun main(args: Array<String>) {

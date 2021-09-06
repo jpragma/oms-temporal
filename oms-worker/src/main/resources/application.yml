@@ -1,6 +1,6 @@
 micronaut:
   application:
-    name: oms-driver
+    name: oms-worker
 #datasources:
 #  default:
 #    url: jdbc:postgresql://localhost:5432/postgres

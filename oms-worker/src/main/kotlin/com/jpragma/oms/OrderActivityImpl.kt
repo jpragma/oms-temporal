@@ -1,6 +1,5 @@
-package com.jpragma.oms.activity
+package com.jpragma.oms
 
-import com.jpragma.oms.Order
 import jakarta.inject.Singleton
 
 
