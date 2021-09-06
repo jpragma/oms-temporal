@@ -20,10 +20,27 @@ val kotlinVersion=project.properties.get("kotlinVersion")
 subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "kotlin-kapt")
+    apply(plugin = "kotlinx-serialization")
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
+        implementation("io.temporal:temporal-sdk:1.0.9")
         runtimeOnly("ch.qos.logback:logback-classic")
+    }
+    tasks {
+        compileKotlin {
+            kotlinOptions {
+                jvmTarget = "13"
+                freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
+            }
+        }
+        compileTestKotlin {
+            kotlinOptions {
+                jvmTarget = "13"
+                freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
+            }
+        }
     }
 }
 
@@ -55,8 +72,8 @@ dependencies {
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-    implementation("io.temporal:temporal-sdk:1.0.9")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
+
+
 }
 
 
@@ -65,21 +82,4 @@ application {
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("11")
-}
-
-tasks {
-    compileKotlin {
-        kotlinOptions {
-            jvmTarget = "11"
-            freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
-        }
-    }
-    compileTestKotlin {
-        kotlinOptions {
-            jvmTarget = "11"
-            freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
-        }
-    }
-
-
 }
