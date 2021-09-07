@@ -1,5 +1,8 @@
 package com.jpragma.oms
 
+import io.temporal.api.enums.v1.WorkflowExecutionStatus
+import io.temporal.api.workflowservice.v1.ListWorkflowExecutionsRequest
+import io.temporal.api.workflowservice.v1.ListWorkflowExecutionsResponse
 import io.temporal.client.WorkflowClient
 import io.temporal.client.WorkflowOptions
 import jakarta.inject.Singleton
@@ -25,5 +28,21 @@ class OmsService(
             .setWorkflowId(orderId.toWorkflowId())
             .build()
         return workflowClient.newWorkflowStub(OrderWorkflow::class.java, options)
+    }
+
+    fun listOngoingOrders():List<OrderId> {
+        val workflowExecutionResponse:ListWorkflowExecutionsResponse = getExecutionResponse("""
+            WorkflowType = 'OrderWorkflow' and
+            ExecutionStatus = ${WorkflowExecutionStatus.WORKFLOW_EXECUTION_STATUS_RUNNING_VALUE}
+        """.trimIndent())
+        return workflowExecutionResponse.executionsList.map { it.execution.workflowId }.map { OrderId(it) }
+    }
+
+    private fun getExecutionResponse(query: String): ListWorkflowExecutionsResponse {
+        val listWorkflowExecutionsRequest = ListWorkflowExecutionsRequest.newBuilder()
+            .setNamespace("default") // todo inject
+            .setQuery(query)
+            .build()
+        return workflowClient.workflowServiceStubs.blockingStub().listWorkflowExecutions(listWorkflowExecutionsRequest)
     }
 }

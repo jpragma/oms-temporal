@@ -27,4 +27,9 @@ class OmsController(
         return "Order $orderId has been accepted"
     }
 
+    @Get("/order/current")
+    fun listOngoingOrders(): List<String> {
+        return omsService.listOngoingOrders().map { it.toWorkflowId() }
+    }
+
 }

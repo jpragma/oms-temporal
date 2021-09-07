@@ -7,7 +7,7 @@ import java.time.Duration
 
 class OrderWorkflowImpl : OrderWorkflow {
     private val orderActivity = createOrderActivityStub()
-    private lateinit var order: Order
+    private var order: Order? = null
 
     override fun startOrderWorkflow(order: Order) {
         this.order = order.apply { status = OrderStatus.PLACED }
@@ -18,12 +18,14 @@ class OrderWorkflowImpl : OrderWorkflow {
     }
 
     override fun signalOrderAccepted() {
-        orderActivity.orderAccepted(this.order)
-        order.status = OrderStatus.ACCEPTED
+        order?.let {
+            orderActivity.orderAccepted(it)
+            it.status = OrderStatus.ACCEPTED
+        }
     }
 
     override fun showOrder(): Order {
-        return order
+        return order!!
     }
 
     private fun createOrderActivityStub(): OrderActivity {

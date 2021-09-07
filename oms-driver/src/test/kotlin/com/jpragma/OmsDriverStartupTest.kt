@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 @MicronautTest
-class OmsTest {
+class OmsDriverStartupTest {
 
     @Inject
     lateinit var application: EmbeddedApplication<*>
