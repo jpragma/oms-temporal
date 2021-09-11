@@ -13,10 +13,13 @@ interface OrderWorkflow {
     }
 
     @WorkflowMethod
-    fun startOrderWorkflow(order: Order)
+    fun processOrder(order: Order)
 
     @SignalMethod
-    fun signalOrderAccepted()
+    fun signalOrderApproval(approved: Boolean)
+
+    @SignalMethod
+    fun signalOrderFulfilled()
 
     @QueryMethod
     fun showOrder(): Order

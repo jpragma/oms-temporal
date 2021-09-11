@@ -9,19 +9,33 @@ class OrderWorkflowImpl : OrderWorkflow {
     private val orderActivity = createOrderActivityStub()
     private var order: Order? = null
 
-    override fun startOrderWorkflow(order: Order) {
+    override fun processOrder(order: Order) {
         this.order = order.apply { status = OrderStatus.PLACED }
 
-        orderActivity.placeOrder()
+        if (orderActivity.containsRestrictedItems(order.items)) {
+            orderActivity.requestApproval(order)
+            order.status = OrderStatus.WAITING_APPROVAL
+            Workflow.await { order.status.approvalResolved()  }
+        }
+        orderActivity.sendOrderForFulfilment(order)
+        Workflow.await { order.status == OrderStatus.FULFILLED }
 
-        Workflow.await { order.status == OrderStatus.ACCEPTED }
+        orderActivity.sendEmailOrderDone(order.customerId)
     }
 
-    override fun signalOrderAccepted() {
-        order?.let {
-            orderActivity.orderAccepted(it)
-            it.status = OrderStatus.ACCEPTED
+    override fun signalOrderApproval(approved: Boolean) {
+        order?.run {
+            if (!approved) {
+                status = OrderStatus.REJECTED
+                orderActivity.sendEmailOrderRejected(customerId)
+            } else {
+                status = OrderStatus.APPROVED
+            }
         }
+    }
+
+    override fun signalOrderFulfilled() {
+        order?.run { this.status = OrderStatus.FULFILLED }
     }
 
     override fun showOrder(): Order {

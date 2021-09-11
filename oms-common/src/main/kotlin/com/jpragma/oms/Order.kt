@@ -6,6 +6,7 @@ import java.util.*
 @Serializable
 data class Order(
     val orderId: OrderId,
+    val customerId: CustomerId,
     val items: List<OrderItem>,
     var status: OrderStatus = OrderStatus.NONE
 )
@@ -31,6 +32,14 @@ value class OrderId(private val v:String) {
     }
 }
 
+@Serializable
+@JvmInline
+value class CustomerId(private val v:String)
+
 enum class OrderStatus {
-    NONE, PLACED, ACCEPTED, IN_PROGRESS, READY, IN_DELIVERY, DONE
+    NONE, PLACED, WAITING_APPROVAL, APPROVED, REJECTED, FULFILLED;
+
+    fun approvalResolved(): Boolean {
+        return this == APPROVED || this == REJECTED
+    }
 }

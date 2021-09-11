@@ -14,12 +14,22 @@ class OmsService(
 
     fun placeOrder(order: Order) {
         val orderWorkflow = createWorkflow(order.orderId)
-        WorkflowClient.start { orderWorkflow.startOrderWorkflow(order) }
+        WorkflowClient.start { orderWorkflow.processOrder(order) }
     }
 
     fun acceptOrder(orderId: OrderId) {
         val orderWorkflow = workflowClient.newWorkflowStub(OrderWorkflow::class.java, orderId.toWorkflowId())
-        orderWorkflow.signalOrderAccepted()
+        orderWorkflow.signalOrderApproval(true)
+    }
+
+    fun rejectOrder(orderId: OrderId) {
+        val orderWorkflow = workflowClient.newWorkflowStub(OrderWorkflow::class.java, orderId.toWorkflowId())
+        orderWorkflow.signalOrderApproval(false)
+    }
+
+    fun fulfillOrder(orderId: OrderId) {
+        val orderWorkflow = workflowClient.newWorkflowStub(OrderWorkflow::class.java, orderId.toWorkflowId())
+        orderWorkflow.signalOrderFulfilled()
     }
 
     private fun createWorkflow(orderId: OrderId): OrderWorkflow {

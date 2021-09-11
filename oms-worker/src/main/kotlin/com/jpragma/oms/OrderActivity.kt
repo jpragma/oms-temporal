@@ -7,7 +7,13 @@ import io.temporal.activity.ActivityMethod
 @ActivityInterface
 interface OrderActivity {
     @ActivityMethod
-    fun placeOrder()
+    fun containsRestrictedItems(items: List<OrderItem>): Boolean
     @ActivityMethod
-    fun orderAccepted(order: Order)
+    fun requestApproval(order: Order)
+    @ActivityMethod
+    fun sendOrderForFulfilment(order: Order)
+    @ActivityMethod
+    fun sendEmailOrderDone(customerId: CustomerId)
+    @ActivityMethod
+    fun sendEmailOrderRejected(customerId: CustomerId)
 }

@@ -14,17 +14,27 @@ class OmsController(
 
     @Post("/place")
     fun placeOrder(@Body orderItemsJson: String): String {
-        val orderItems:List<OrderItem> = Json.decodeFromString(orderItemsJson)
-        val orderId = OrderId.randomOrderId()
-        val order = Order(orderId, orderItems)
+        val order:Order = Json.decodeFromString<Order>(orderItemsJson).copy(orderId = OrderId.randomOrderId())
         omsService.placeOrder(order)
-        return orderId.toWorkflowId()
+        return order.orderId.toWorkflowId()
     }
 
     @Put("/accept")
     fun acceptOrder(@QueryValue("orderId") orderId: String): String {
         omsService.acceptOrder(OrderId(orderId))
         return "Order $orderId has been accepted"
+    }
+
+    @Put("/reject")
+    fun rejectOrder(@QueryValue("orderId") orderId: String): String {
+        omsService.rejectOrder(OrderId(orderId))
+        return "Order $orderId has been rejected"
+    }
+
+    @Put("/fulfill")
+    fun fulfillOrder(@QueryValue("orderId") orderId: String): String {
+        omsService.fulfillOrder(OrderId(orderId))
+        return "Order $orderId has been fulfilled"
     }
 
     @Get("/order/current")
