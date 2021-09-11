@@ -12,7 +12,7 @@ class OrderWorkflowImpl : OrderWorkflow {
     override fun processOrder(order: Order) {
         this.order = order.apply { status = OrderStatus.PLACED }
 
-        if (orderActivity.containsRestrictedItems(order.items)) {
+        if (orderActivity.containsRestrictedItems(order)) {
             orderActivity.requestApproval(order)
             order.status = OrderStatus.WAITING_APPROVAL
             Workflow.await { order.status.approvalResolved()  }

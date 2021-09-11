@@ -41,7 +41,7 @@ internal class OrderSerializationTest {
             customerId = CustomerId("c987"),
             items = listOf(OrderItem("i987", "BLT sandwich", 8.45, 2.0))
         )
-        val serialized = serializeAnyObject(order.items)
+        val serialized = serializeAnyObject(order)
         println(serialized)
         assertNotNull(serialized)
     }

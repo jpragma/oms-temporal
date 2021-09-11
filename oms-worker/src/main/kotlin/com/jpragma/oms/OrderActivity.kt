@@ -7,7 +7,7 @@ import io.temporal.activity.ActivityMethod
 @ActivityInterface
 interface OrderActivity {
     @ActivityMethod
-    fun containsRestrictedItems(items: List<OrderItem>): Boolean
+    fun containsRestrictedItems(order: Order): Boolean
     @ActivityMethod
     fun requestApproval(order: Order)
     @ActivityMethod
