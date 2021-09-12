@@ -1,18 +1,19 @@
 package com.jpragma.oms
 
-import kotlinx.serialization.*
-import kotlinx.serialization.json.Json
+import com.fasterxml.jackson.databind.ObjectMapper
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import jakarta.inject.Inject
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
-import kotlin.jvm.internal.Reflection
-import kotlin.reflect.full.createType
 
-@ExperimentalSerializationApi
+@MicronautTest
 internal class OrderSerializationTest {
 
+    @Inject
+    private lateinit var objectMapper: ObjectMapper
+
     @Test
-    fun `can deserialize Order object using kotlin_serialization`() {
+    fun `can deserialize Order object using jackson`() {
         val json = """{
             "orderId": "o123",
             "customerId": "c987",
@@ -25,35 +26,16 @@ internal class OrderSerializationTest {
               }
             ]
           }""".trimIndent()
-        val order = Json.decodeFromString<Order>(json)
+//        objectMapper.registerModule(kotlinModule())
+        val order = objectMapper.readValue(json, Order::class.java)
         val expectedOrder = Order(
-            orderId = OrderId("o123"),
-            customerId = CustomerId("c987"),
+            orderId = "o123",
+            customerId = "c987",
             items = listOf(OrderItem("i987", "BLT sandwich", 8.45, 2.0))
         )
+
         assertEquals(expectedOrder, order)
     }
 
-    @Test
-    fun `serialize without specifying exact type`() {
-        val order = Order(
-            orderId = OrderId("o123"),
-            customerId = CustomerId("c987"),
-            items = listOf(OrderItem("i987", "BLT sandwich", 8.45, 2.0))
-        )
-        val serialized = serializeAnyObject(order)
-        println(serialized)
-        assertNotNull(serialized)
-    }
-
-    private fun serializeAnyObject(value: Any):String {
-        return Json.encodeToString(serializerForClass(value.javaClass), value)
-    }
-
-    private fun <T : Any> serializerForClass(valueClass: Class<T>): KSerializer<T> {
-        val kClass = Reflection.createKotlinClass(valueClass)
-        val kType = kClass.createType()
-        return serializer(kType) as KSerializer<T>
-    }
 
 }

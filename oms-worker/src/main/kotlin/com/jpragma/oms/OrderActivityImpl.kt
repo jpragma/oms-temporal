@@ -21,15 +21,15 @@ class OrderActivityImpl : OrderActivity {
         println("*** Sending order ${order.orderId} for fulfilment")
     }
 
-    override fun sendEmailOrderDone(customerId: CustomerId) {
+    override fun sendEmailOrderDone(customerId: String) {
         sendEmail(customerId, "Your order is done")
     }
 
-    override fun sendEmailOrderRejected(customerId: CustomerId) {
+    override fun sendEmailOrderRejected(customerId: String) {
         sendEmail(customerId, "Your order has been rejected")
     }
 
-    private fun sendEmail(customerId: CustomerId, emailText: String) {
+    private fun sendEmail(customerId: String, emailText: String) {
         println("Sending email for customer $customerId. Text: $emailText")
     }
 }

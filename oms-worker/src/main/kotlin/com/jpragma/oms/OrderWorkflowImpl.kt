@@ -15,22 +15,24 @@ class OrderWorkflowImpl : OrderWorkflow {
         if (orderActivity.containsRestrictedItems(order)) {
             orderActivity.requestApproval(order)
             order.status = OrderStatus.WAITING_APPROVAL
-            Workflow.await { order.status.approvalResolved()  }
+            Workflow.await { order.status.approvalResolved() }
+        } else {
+            order.status = OrderStatus.APPROVED
         }
-        orderActivity.sendOrderForFulfilment(order)
-        Workflow.await { order.status == OrderStatus.FULFILLED }
 
-        orderActivity.sendEmailOrderDone(order.customerId)
+        if (order.status == OrderStatus.APPROVED) {
+            orderActivity.sendOrderForFulfilment(order)
+            Workflow.await { order.status == OrderStatus.FULFILLED }
+
+            orderActivity.sendEmailOrderDone(order.customerId)
+        } else if (order.status == OrderStatus.REJECTED) {
+            orderActivity.sendEmailOrderRejected(order.customerId)
+        }
     }
 
     override fun signalOrderApproval(approved: Boolean) {
         order?.run {
-            if (!approved) {
-                status = OrderStatus.REJECTED
-                orderActivity.sendEmailOrderRejected(customerId)
-            } else {
-                status = OrderStatus.APPROVED
-            }
+            status = if (approved) OrderStatus.APPROVED else OrderStatus.REJECTED
         }
     }
 

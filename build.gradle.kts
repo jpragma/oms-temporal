@@ -4,7 +4,6 @@ plugins {
     id("com.github.johnrengelman.shadow") version "7.0.0" apply false
     id("io.micronaut.application") version "2.0.3" apply false
     id("org.jetbrains.kotlin.plugin.allopen") version "1.5.30"
-    kotlin("plugin.serialization") version "1.5.30"
 }
 
 allprojects {
@@ -20,11 +19,10 @@ val kotlinVersion=project.properties.get("kotlinVersion")
 subprojects {
     apply(plugin = "kotlin")
     apply(plugin = "kotlin-kapt")
-    apply(plugin = "kotlinx-serialization")
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
-        implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
+        implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.3")
         implementation("io.temporal:temporal-sdk:1.0.9")
         runtimeOnly("ch.qos.logback:logback-classic")
     }

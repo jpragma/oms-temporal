@@ -13,7 +13,7 @@ interface OrderActivity {
     @ActivityMethod
     fun sendOrderForFulfilment(order: Order)
     @ActivityMethod
-    fun sendEmailOrderDone(customerId: CustomerId)
+    fun sendEmailOrderDone(customerId: String)
     @ActivityMethod
-    fun sendEmailOrderRejected(customerId: CustomerId)
+    fun sendEmailOrderRejected(customerId: String)
 }

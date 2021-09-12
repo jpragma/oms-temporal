@@ -1,45 +1,41 @@
 package com.jpragma.oms
 
 import io.micronaut.http.annotation.*
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 
 
-@ExperimentalSerializationApi
 @Controller("/oms")
 class OmsController(
     private val omsService: OmsService
 ) {
 
     @Post("/place")
-    fun placeOrder(@Body orderItemsJson: String): String {
-        val order:Order = Json.decodeFromString<Order>(orderItemsJson).copy(orderId = OrderId.randomOrderId())
+    fun placeOrder(@Body orderData: Order): String {
+        val order:Order = orderData.copy(orderId = Order.randomOrderId())
         omsService.placeOrder(order)
-        return order.orderId.toWorkflowId()
+        return order.orderId
     }
 
     @Put("/accept")
     fun acceptOrder(@QueryValue("orderId") orderId: String): String {
-        omsService.acceptOrder(OrderId(orderId))
+        omsService.acceptOrder(orderId)
         return "Order $orderId has been accepted"
     }
 
     @Put("/reject")
     fun rejectOrder(@QueryValue("orderId") orderId: String): String {
-        omsService.rejectOrder(OrderId(orderId))
+        omsService.rejectOrder(orderId)
         return "Order $orderId has been rejected"
     }
 
     @Put("/fulfill")
     fun fulfillOrder(@QueryValue("orderId") orderId: String): String {
-        omsService.fulfillOrder(OrderId(orderId))
+        omsService.fulfillOrder(orderId)
         return "Order $orderId has been fulfilled"
     }
 
     @Get("/order/current")
     fun listOngoingOrders(): List<String> {
-        return omsService.listOngoingOrders().map { it.toWorkflowId() }
+        return omsService.listOngoingOrders()
     }
 
 }

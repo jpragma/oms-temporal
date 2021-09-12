@@ -1,40 +1,26 @@
 package com.jpragma.oms
 
-import kotlinx.serialization.Serializable
 import java.util.*
 
-@Serializable
 data class Order(
-    val orderId: OrderId,
-    val customerId: CustomerId,
+    val orderId: String,
+    val customerId: String,
     val items: List<OrderItem>,
     var status: OrderStatus = OrderStatus.NONE
-)
+) {
+    companion object {
+        fun randomOrderId(): String {
+            return UUID.randomUUID().toString()
+        }
+    }
+}
 
-@Serializable
 data class OrderItem(
     val itemId: String,
     val description: String,
     val price: Double,
     val amount: Double
 )
-
-@Serializable
-@JvmInline
-value class OrderId(private val v:String) {
-    companion object {
-        fun randomOrderId():OrderId {
-            return OrderId(UUID.randomUUID().toString())
-        }
-    }
-    fun toWorkflowId(): String {
-        return v
-    }
-}
-
-@Serializable
-@JvmInline
-value class CustomerId(private val v:String)
 
 enum class OrderStatus {
     NONE, PLACED, WAITING_APPROVAL, APPROVED, REJECTED, FULFILLED;
