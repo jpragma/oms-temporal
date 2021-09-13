@@ -1,6 +1,5 @@
 package com.jpragma.oms
 
-import com.jpragma.oms.Order
 import io.temporal.activity.ActivityInterface
 import io.temporal.activity.ActivityMethod
 

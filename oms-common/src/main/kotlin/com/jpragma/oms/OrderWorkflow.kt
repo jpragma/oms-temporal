@@ -8,7 +8,7 @@ import io.temporal.workflow.WorkflowMethod
 @WorkflowInterface
 interface OrderWorkflow {
     companion object {
-        val ORDER_QUEUE_NAME = "Customer_Order"
+        const val ORDER_QUEUE_NAME = "Customer_Order"
     }
 
     @WorkflowMethod

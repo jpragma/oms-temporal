@@ -26,7 +26,6 @@ internal class OrderSerializationTest {
               }
             ]
           }""".trimIndent()
-//        objectMapper.registerModule(kotlinModule())
         val order = objectMapper.readValue(json, Order::class.java)
         val expectedOrder = Order(
             orderId = "o123",
