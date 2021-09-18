@@ -1,24 +1,23 @@
-## Micronaut 2.5.11 Documentation
+## OMS Workflow Demo
+Simple project demonstrating usage of [Temporal](https://www.temporal.io/) Worklow engine.
 
-- [User Guide](https://docs.micronaut.io/2.5.11/guide/index.html)
-- [API Reference](https://docs.micronaut.io/2.5.11/api/index.html)
-- [Configuration Reference](https://docs.micronaut.io/2.5.11/guide/configurationreference.html)
-- [Micronaut Guides](https://guides.micronaut.io/index.html)
 ---
+- Multi-module project
+  - oms-driver - REST API that allows to initiate a workflow, query existing workflows and send signals to them 
+  - oms-worker - Workflow implementation and activities. More than one instance of the worker could be run
+  - oms-common - Workflow interface and domain objects
+- Technologies used:
+  - Language: [Kotlin](https://kotlinlang.org/)
+  - Build tool: Gradle with Kotlin DSL
+  - Dependency injection and Web framework: [Micronaut](https://micronaut.io/) 
 
-## Feature data-jdbc documentation
+### Implementation Notes
+Domain object that are submitted to workflows and activities must be serializable.
+Temporal uses pluggable mechanism of such serialization. By default, objects are serialized to/from JSON using [Jackson](https://github.com/FasterXML/jackson).
+In order to use Kotlin data classes, Jackson's ObjectMapper must be customized to register kotlin support module.
+ObjectMapper used by Micronaut already registers this module, so it could be passed to Temporal *JacksonJsonPayloadConverter*. See *com.jpragma.oms.WorkflowClientFactory.Companion.customPayloadConverter* as example.
 
-- [Micronaut Data JDBC documentation](https://micronaut-projects.github.io/micronaut-data/latest/guide/index.html#jdbc)
-
-## Feature testcontainers documentation
-
-- [https://www.testcontainers.org/](https://www.testcontainers.org/)
-
-## Feature http-client documentation
-
-- [Micronaut HTTP Client documentation](https://docs.micronaut.io/latest/guide/index.html#httpClient)
-
-## Feature jdbc-hikari documentation
-
-- [Micronaut Hikari JDBC Connection Pool documentation](https://micronaut-projects.github.io/micronaut-sql/latest/guide/index.html#jdbc)
-
+Jackson still doesn't support Kotlin's [Inline Value classes](https://kotlinlang.org/docs/inline-classes.html). This is the reason I used Strings as IDs in domain objects. 
+I tried to create a custom Temporal PayloadConvertor using Kotlin's native [Kotlin Serialization](https://github.com/Kotlin/kotlinx.serialization). While kotlin-serialization supports data classes, inline classes, etc. 
+it requires specifying serialized/deserialized classes at compile time. So far, I couldn't find how to implement generic PayloadConverter
+that can take care of serialization/deserialization of an arbitrary domain object.  
